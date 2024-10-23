@@ -17,22 +17,27 @@ import Table from '../components/Table';
 
 interface Task {
   task: string;
-    isDone: boolean;
+  isDone: boolean;
 
 } 
 
+
+const initialState =JSON.parse(localStorage.getItem('todos')) || []
+console.log();
 export default function  ToDo() {
    const [task, setTask] = useState('');
   const [dueDate, setDueDate] = useState('');
-  const [todos, setTodos] = useState<Task[]>([]);
+  const [todos, setTodos] = useState<Task[]>(initialState);
   
  
 
   const handleAddTask = (e) => {
 e.preventDefault () 
-    setTodos([...todos, { task, isDone: false, id: Date.now() }]);
+const nextTodoState = [...todos, { task, isDone: false, id: Date.now() }]
+    setTodos(nextTodoState);
+
       setTask('');
-console.log(todos);
+  localStorage.setItem('todos', JSON.stringify(nextTodoState))
   }
 
 
@@ -48,11 +53,13 @@ const updateTodo = (todoToUpdate) => {
     return todo
   })
   setTodos(newTodos)
+  localStorage.setItem('todos', JSON.stringify(newTodos))
 }
 
 const deleteTodo = (todoToDelete) => {
   const clinTodo = todos.filter((todo)=> todo.id !== todoToDelete.id)
   setTodos(clinTodo)
+   localStorage.setItem('todos', JSON.stringify(clinTodo))
 }
 
   return (
@@ -72,16 +79,8 @@ const deleteTodo = (todoToDelete) => {
 
 
         />
-        {/* <TextField
-          placeholder="Срок выполнения"
-          type="datetime-local"
-          fullWidth
-          margin="normal"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-
-        /> */}
-        <Button onClick={handleAddTask} variant="contained" color="primary">
+  
+        <Button disabled={!Boolean(task.length)} onClick={handleAddTask} variant="contained" color="primary">
           Добавить задачу
         </Button>
       </Paper>
