@@ -18,20 +18,20 @@ import Table from '../components/Table';
 interface Task {
   task: string;
   isDone: boolean;
+  id: number
 
 } 
 
 
-const initialState =JSON.parse(localStorage.getItem('todos')) || []
+const initialState:Task[] =JSON.parse(localStorage.getItem('todos') || '[]')
 console.log();
 export default function  ToDo() {
-   const [task, setTask] = useState('');
-  const [dueDate, setDueDate] = useState('');
+   const [task, setTask] = useState<string>('');
   const [todos, setTodos] = useState<Task[]>(initialState);
   
  
 
-  const handleAddTask = (e) => {
+  const handleAddTask = (e:React.FormEvent<HTMLFormElement>) => {
 e.preventDefault () 
 const nextTodoState = [...todos, { task, isDone: false, id: Date.now() }]
     setTodos(nextTodoState);
@@ -88,13 +88,13 @@ const deleteTodo = (todoToDelete) => {
       <Box display="flex" justifyContent="space-between">
         <Paper elevation={3} style={{ padding: '16px', width: '48%' }}>
           <Typography variant="h6">Невыполненные задачи</Typography>
-          {/* Здесь можно вставить компонент с невыполненными задачами */}
+         
           <Table todos={todoInProgress} setTodos={setTodos} updateTodo={updateTodo}  />
         </Paper>
 
         <Paper elevation={3} style={{ padding: '16px', width: '48%' }}>
           <Typography variant="h6">Выполненные задачи</Typography>
-          {/* Здесь можно вставить компонент с выполненными задачами */}
+        
           <Table  todos={todoIsDone} deleteTodo={deleteTodo} />
         </Paper>
       </Box>
